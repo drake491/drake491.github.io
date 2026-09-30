@@ -1,27 +1,29 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ ROOT@DEFC0N_HUB:~</title>
+    <title>⚡ MATRIX_STREAM:~</title>
     <style>
-        body {
+        /* Zero out everything to remove all margins and scrolling bars */
+        html, body {
             background-color: #000;
-            color: #00ff33;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 30px;
             margin: 0;
-            overflow-x: hidden;
+            padding: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
         }
 
-        /* 🟢 The Matrix Canvas Layer */
+        /* Full-screen Matrix Canvas layer */
         #matrixCanvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         /* Retro CRT glass scanline overlay */
@@ -36,82 +38,19 @@
             background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
             background-size: 100% 4px, 6px 100%;
         }
-
-        /* 🛠️ The Fix: Removed the solid borders, shadows, and dark backgrounds from the main box container */
-        .terminal-box {
-            max-width: 850px;
-            margin: 40px auto 0 auto;
-            padding: 25px;
-        }
-
-        .terminal-header { 
-            border-bottom: 2px dashed #00ff33; 
-            padding-bottom: 15px; 
-            margin-bottom: 20px; 
-            text-shadow: 0 0 5px #00ff33;
-        }
-        
-        .prompt { color: #00ffff; text-shadow: 0 0 5px #00ffff;}
-        .status-line { color: #888; font-size: 0.9rem; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        
-        /* 🛠️ Removed the dark background layout block around individual tools so they float on the canvas matrix */
-        .module { 
-            border: 1px solid #00ff33; 
-            background: rgba(0, 0, 0, 0.6); /* Semi-transparent to let code rain slide through text fields */
-            padding: 15px; 
-            box-shadow: 0 0 10px rgba(0,255,51,0.2);
-        }
-        
-        textarea {
-            width: 100%; height: 90px; background: rgba(0,0,0,0.8); color: #33ff66;
-            border: 1px solid #00ff33; padding: 12px; box-sizing: border-box;
-            font-family: 'Courier New', monospace; font-size: 1rem; margin-top: 10px; outline: none;
-        }
-        textarea:focus { box-shadow: 0 0 8px rgba(0, 255, 51, 0.5); }
-        button {
-            background: #00ff33; color: #000; border: 1px solid #00ff33;
-            padding: 10px 25px; font-weight: bold; font-family: monospace;
-            cursor: pointer; margin-top: 15px; transition: all 0.2s;
-        }
-        button:hover { background: #000; color: #00ff33; box-shadow: 0 0 15px #00ff33; transform: scale(1.02); }
     </style>
 </head>
 <body>
 
+    <!-- 🎥 Canvas drawing layer and retro scanlines -->
     <canvas id="matrixCanvas"></canvas>
     <div class="crt-overlay"></div>
-
-    <div class="terminal-box">
-        <div class="terminal-header">
-            <h2>[☠️] DEFC0N_HUB // OPERATOR CONSOLE</h2>
-            <div class="status-line">STATUS: <span style="color: #00ff33; font-weight: bold;">ONLINE</span> | TARGET: CTF_PLAYER_1 | SECURITY_LEVEL: ROOT</div>
-        </div>
-
-        <p><span class="prompt">guest@defcon_hub:~$</span> cat system_init.log</p>
-        <p style="color: #a5f3fc; text-shadow: 0 0 5px rgba(165,243,252,0.4);">Initializing toolkit. Environment configured for binary matrix streams, payload processing, and hex injections.</p>
-
-        <div class="grid">
-            <div class="module">
-                <h3>// TOOL_01: String to Hex</h3>
-                <textarea id="plainText" placeholder="Enter text (e.g., admin)"></textarea>
-                <button onclick="convertToHex()">Execute()</button>
-                <textarea id="hexResult" readonly placeholder="Hex output..."></textarea>
-            </div>
-
-            <div class="module">
-                <h3>// TOOL_02: Base64 Decoder</h3>
-                <textarea id="b64Input" placeholder="Enter Base64 string"></textarea>
-                <button onclick="decodeB64()">Execute()</button>
-                <textarea id="b64Result" readonly placeholder="Decoded output..."></textarea>
-            </div>
-        </div>
-    </div>
 
     <script>
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
 
+        // Automatically size canvas to perfectly fit screen viewport
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -119,20 +58,23 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
+        // Binary falling characters (0 and 1)
         const matrixChars = ["0", "1"];
         const fontSize = 16;
         const columns = canvas.width / fontSize;
 
+        // Tracks individual column positions
         const rainDrops = [];
         for (let x = 0; x < columns; x++) {
             rainDrops[x] = 1;
         }
 
         function drawMatrixRain() {
+            // Faint black background overlay to drag out trails
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '#00ff33';
+            ctx.fillStyle = '#00ff33'; /* Classic hacker terminal green */
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < rainDrops.length; i++) {
@@ -142,6 +84,7 @@
 
                 ctx.fillText(text, xPos, yPos);
 
+                // Reset drop string row loop to top randomly once past screen baseline
                 if (yPos > canvas.height && Math.random() > 0.975) {
                     rainDrops[i] = 0;
                 }
@@ -149,25 +92,8 @@
             }
         }
 
+        // Loop animation draw intervals smoothly
         setInterval(drawMatrixRain, 30);
-
-        function convertToHex() {
-            const str = document.getElementById('plainText').value;
-            let hex = '';
-            for(let i=0; i<str.length; i++) {
-                hex += '\\x' + str.charCodeAt(i).toString(16).padStart(2, '0');
-            }
-            document.getElementById('hexResult').value = hex || 'Empty string.';
-        }
-
-        function decodeB64() {
-            const input = document.getElementById('b64Input').value;
-            try {
-                document.getElementById('b64Result').value = atob(input.trim());
-            } catch (err) {
-                document.getElementById('b64Result').value = "ERROR: Invalid Base64 payload.";
-            }
-        }
     </script>
 </body>
 </html>
