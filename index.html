@@ -1,12 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ MATRIX_STREAM:~</title>
+    <title>⚡ MATRIX_STREAM</title>
     <style>
-        /* Zero out everything to remove all margins and scrolling bars */
         html, body {
             background-color: #000;
             margin: 0;
@@ -16,7 +14,6 @@
             height: 100vh;
         }
 
-        /* Full-screen Matrix Canvas layer */
         #matrixCanvas {
             position: fixed;
             top: 0;
@@ -26,7 +23,6 @@
             display: block;
         }
 
-        /* Retro CRT glass scanline overlay */
         .crt-overlay {
             position: fixed;
             top: 0;
@@ -42,7 +38,6 @@
 </head>
 <body>
 
-    <!-- 🎥 Canvas drawing layer and retro scanlines -->
     <canvas id="matrixCanvas"></canvas>
     <div class="crt-overlay"></div>
 
@@ -50,7 +45,6 @@
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Automatically size canvas to perfectly fit screen viewport
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -58,23 +52,20 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Binary falling characters (0 and 1)
         const matrixChars = ["0", "1"];
         const fontSize = 16;
         const columns = canvas.width / fontSize;
 
-        // Tracks individual column positions
         const rainDrops = [];
         for (let x = 0; x < columns; x++) {
             rainDrops[x] = 1;
         }
 
         function drawMatrixRain() {
-            // Faint black background overlay to drag out trails
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '#00ff33'; /* Classic hacker terminal green */
+            ctx.fillStyle = '#00ff33';
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < rainDrops.length; i++) {
@@ -84,7 +75,6 @@
 
                 ctx.fillText(text, xPos, yPos);
 
-                // Reset drop string row loop to top randomly once past screen baseline
                 if (yPos > canvas.height && Math.random() > 0.975) {
                     rainDrops[i] = 0;
                 }
@@ -92,8 +82,8 @@
             }
         }
 
-        // Loop animation draw intervals smoothly
         setInterval(drawMatrixRain, 30);
     </script>
 </body>
 </html>
+
