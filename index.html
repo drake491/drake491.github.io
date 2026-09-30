@@ -4,86 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>⚡ MATRIX_STREAM</title>
-    <style>
-        html, body {
-            background-color: #000;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .crt-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 999;
-            pointer-events: none;
-            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
-            background-size: 100% 4px, 6px 100%;
-        }
-    </style>
+    <!-- 🔗 This line grabs your styling automatically -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <canvas id="matrixCanvas"></canvas>
     <div class="crt-overlay"></div>
 
-    <script>
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
+    <!-- ✍️ ALL OF YOUR MASSIVE WRITING GOES INSIDE THIS BOX BELOW -->
+    <div class="content-overlay">
+        <h1>// DRAKE491_MISSION_CONTROL</h1>
+        
+        <p><span class="log-date">[+] INITIALIZATION:</span> Welcome to my main deployment hub. I am drake491, tracking my progress across cybersecurity environments, platforms, and CTF campaigns.</p>
+        
+        <p><span class="log-date">[+] OPERATIONS:</span> This console serves as my personal operational log. Because we split the files, you can write thousands of lines right here without drowning in the background animation code.</p>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        <!-- You can keep duplicating <p> blocks downward as much as you want to type infinitely! -->
+    </div>
 
-        const matrixChars = ["0", "1"];
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-
-        const rainDrops = [];
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = 1;
-        }
-
-        function drawMatrixRain() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#00ff33';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
-                const xPos = i * fontSize;
-                const yPos = rainDrops[i] * fontSize;
-
-                ctx.fillText(text, xPos, yPos);
-
-                if (yPos > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
-            }
-        }
-
-        setInterval(drawMatrixRain, 30);
-    </script>
+    <!-- 🔗 This line runs your matrix rain automatically -->
+    <script src="script.js"></script>
 </body>
 </html>
 
