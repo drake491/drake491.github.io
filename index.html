@@ -14,6 +14,7 @@
             overflow-x: hidden;
         }
 
+        /* 🟢 The Matrix Canvas Layer */
         #matrixCanvas {
             position: fixed;
             top: 0;
@@ -23,6 +24,7 @@
             z-index: -1;
         }
 
+        /* Retro CRT glass scanline overlay */
         .crt-overlay {
             position: fixed;
             top: 0;
@@ -35,44 +37,34 @@
             background-size: 100% 4px, 6px 100%;
         }
 
-        @keyframes bootUp {
-            from { transform: scaleY(0.01) scaleX(0); filter: brightness(5); }
-            50% { transform: scaleY(0.01) scaleX(1); filter: brightness(3); }
-            to { transform: scaleY(1) scaleX(1); filter: brightness(1); }
-        }
-
-        @keyframes crtFlicker {
-            0% { opacity: 0.97; }
-            50% { opacity: 1; }
-            100% { opacity: 0.98; }
-        }
-
-        @keyframes typeEffect { from { width: 0; } to { width: 100%; } }
-        @keyframes blinkCursor { from, to { border-color: transparent; } 50% { border-color: #00ff33; } }
-
+        /* 🛠️ The Fix: Removed the solid borders, shadows, and dark backgrounds from the main box container */
         .terminal-box {
             max-width: 850px;
-            margin: 80px auto 0 auto;
-            border: 2px solid #00ff33;
-            background-color: rgba(5, 5, 5, 0.92);
+            margin: 40px auto 0 auto;
             padding: 25px;
-            box-shadow: 0 0 30px rgba(0, 255, 51, 0.3);
-            animation: bootUp 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards, crtFlicker 0.15s infinite;
-            transform-origin: center;
         }
 
-        .terminal-header { border-bottom: 2px dashed #00ff33; padding-bottom: 15px; margin-bottom: 20px; }
-        .typing-line {
-            display: inline-block; overflow: hidden; white-space: nowrap; border-right: 3px solid #00ff33; width: 0;
-            animation: typeEffect 2s steps(30, end) 0.6s forwards, blinkCursor 0.8s step-end infinite;
+        .terminal-header { 
+            border-bottom: 2px dashed #00ff33; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+            text-shadow: 0 0 5px #00ff33;
         }
-        .prompt { color: #00ffff; }
+        
+        .prompt { color: #00ffff; text-shadow: 0 0 5px #00ffff;}
         .status-line { color: #888; font-size: 0.9rem; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        .module { border: 1px solid #114411; background: rgba(0,0,0,0.8); padding: 15px; }
+        
+        /* 🛠️ Removed the dark background layout block around individual tools so they float on the canvas matrix */
+        .module { 
+            border: 1px solid #00ff33; 
+            background: rgba(0, 0, 0, 0.6); /* Semi-transparent to let code rain slide through text fields */
+            padding: 15px; 
+            box-shadow: 0 0 10px rgba(0,255,51,0.2);
+        }
         
         textarea {
-            width: 100%; height: 90px; background: #000; color: #33ff66;
+            width: 100%; height: 90px; background: rgba(0,0,0,0.8); color: #33ff66;
             border: 1px solid #00ff33; padding: 12px; box-sizing: border-box;
             font-family: 'Courier New', monospace; font-size: 1rem; margin-top: 10px; outline: none;
         }
@@ -96,8 +88,8 @@
             <div class="status-line">STATUS: <span style="color: #00ff33; font-weight: bold;">ONLINE</span> | TARGET: CTF_PLAYER_1 | SECURITY_LEVEL: ROOT</div>
         </div>
 
-        <p><span class="prompt">guest@defcon_hub:~$</span> <span class="typing-line">cat system_init.log</span></p>
-        <p style="color: #a5f3fc;">Initializing toolkit. Environment configured for binary matrix streams, payload processing, and hex injections.</p>
+        <p><span class="prompt">guest@defcon_hub:~$</span> cat system_init.log</p>
+        <p style="color: #a5f3fc; text-shadow: 0 0 5px rgba(165,243,252,0.4);">Initializing toolkit. Environment configured for binary matrix streams, payload processing, and hex injections.</p>
 
         <div class="grid">
             <div class="module">
