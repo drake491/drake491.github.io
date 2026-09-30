@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ ROOT@DEFC0N_HUB:~</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #00ff33;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 30px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            background-size: 100% 4px, 6px 100%;
+        }
+
+        @keyframes bootUp {
+            from { transform: scaleY(0.01) scaleX(0); filter: brightness(5); }
+            50% { transform: scaleY(0.01) scaleX(1); filter: brightness(3); }
+            to { transform: scaleY(1) scaleX(1); filter: brightness(1); }
+        }
+
+        @keyframes crtFlicker {
+            0% { opacity: 0.97; }
+            50% { opacity: 1; }
+            100% { opacity: 0.98; }
+        }
+
+        @keyframes typeEffect { from { width: 0; } to { width: 100%; } }
+        @keyframes blinkCursor { from, to { border-color: transparent; } 50% { border-color: #00ff33; } }
+
+        .terminal-box {
+            max-width: 850px;
+            margin: 80px auto 0 auto;
+            border: 2px solid #00ff33;
+            background-color: rgba(5, 5, 5, 0.92);
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(0, 255, 51, 0.3);
+            animation: bootUp 0.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards, crtFlicker 0.15s infinite;
+            transform-origin: center;
+        }
+
+        .terminal-header { border-bottom: 2px dashed #00ff33; padding-bottom: 15px; margin-bottom: 20px; }
+        .typing-line {
+            display: inline-block; overflow: hidden; white-space: nowrap; border-right: 3px solid #00ff33; width: 0;
+            animation: typeEffect 2s steps(30, end) 0.6s forwards, blinkCursor 0.8s step-end infinite;
+        }
+        .prompt { color: #00ffff; }
+        .status-line { color: #888; font-size: 0.9rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .module { border: 1px solid #114411; background: rgba(0,0,0,0.8); padding: 15px; }
+        
+        textarea {
+            width: 100%; height: 90px; background: #000; color: #33ff66;
+            border: 1px solid #00ff33; padding: 12px; box-sizing: border-box;
+            font-family: 'Courier New', monospace; font-size: 1rem; margin-top: 10px; outline: none;
+        }
+        textarea:focus { box-shadow: 0 0 8px rgba(0, 255, 51, 0.5); }
+        button {
+            background: #00ff33; color: #000; border: 1px solid #00ff33;
+            padding: 10px 25px; font-weight: bold; font-family: monospace;
+            cursor: pointer; margin-top: 15px; transition: all 0.2s;
+        }
+        button:hover { background: #000; color: #00ff33; box-shadow: 0 0 15px #00ff33; transform: scale(1.02); }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+    <div class="crt-overlay"></div>
+
+    <div class="terminal-box">
+        <div class="terminal-header">
+            <h2>[☠️] DEFC0N_HUB // OPERATOR CONSOLE</h2>
+            <div class="status-line">STATUS: <span style="color: #00ff33; font-weight: bold;">ONLINE</span> | TARGET: CTF_PLAYER_1 | SECURITY_LEVEL: ROOT</div>
+        </div>
+
+        <p><span class="prompt">guest@defcon_hub:~$</span> <span class="typing-line">cat system_init.log</span></p>
+        <p style="color: #a5f3fc;">Initializing toolkit. Environment configured for binary matrix streams, payload processing, and hex injections.</p>
+
+        <div class="grid">
+            <div class="module">
+                <h3>// TOOL_01: String to Hex</h3>
+                <textarea id="plainText" placeholder="Enter text (e.g., admin)"></textarea>
+                <button onclick="convertToHex()">Execute()</button>
+                <textarea id="hexResult" readonly placeholder="Hex output..."></textarea>
+            </div>
+
+            <div class="module">
+                <h3>// TOOL_02: Base64 Decoder</h3>
+                <textarea id="b64Input" placeholder="Enter Base64 string"></textarea>
+                <button onclick="decodeB64()">Execute()</button>
+                <textarea id="b64Result" readonly placeholder="Decoded output..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const matrixChars = ["0", "1"];
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        function drawMatrixRain() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff33';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                const xPos = i * fontSize;
+                const yPos = rainDrops[i] * fontSize;
+
+                ctx.fillText(text, xPos, yPos);
+
+                if (yPos > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        setInterval(drawMatrixRain, 30);
+
+        function convertToHex() {
+            const str = document.getElementById('plainText').value;
+            let hex = '';
+            for(let i=0; i<str.length; i++) {
+                hex += '\\x' + str.charCodeAt(i).toString(16).padStart(2, '0');
+            }
+            document.getElementById('hexResult').value = hex || 'Empty string.';
+        }
+
+        function decodeB64() {
+            const input = document.getElementById('b64Input').value;
+            try {
+                document.getElementById('b64Result').value = atob(input.trim());
+            } catch (err) {
+                document.getElementById('b64Result').value = "ERROR: Invalid Base64 payload.";
+            }
+        }
+    </script>
+</body>
+</html>
