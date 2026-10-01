@@ -45,7 +45,7 @@ html, body {
     scrollbar-color: #00ff33 #000;
 }
 
-/* Custom scrollbar tracking for when your text gets long */
+
 .content-overlay::-webkit-scrollbar { width: 6px; }
 .content-overlay::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); }
 .content-overlay::-webkit-scrollbar-thumb { background-color: #00ff33; border-radius: 3px; }
