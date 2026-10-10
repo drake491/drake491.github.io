@@ -59,13 +59,71 @@
             The key here was just to  get on with it. While maths can be tricky, with practice anything can become easier.    </p>
         
         <p>My internet speed is rather slow. Trying to download an iso with primitive download speed is rather vexing.
-        However, not much can be done about this issue. i may as ell bite the bullete and get on with it. </p> 
+        However, not much can be done about this issue. i may as well bite the bullete and get on with it. </p> 
 
 
 
            <p><span class="log-date">[+] UPDATE:</span> 08/10/26  i was meant to get a parrot vm up and running. But slow internet speeds meant i had problems. 
            In the end i used an open source aplication to torrent the iso. Ive used parrot before but never used torrent technology. Of course i also checked 
            the  SHA256 checksum.  </p>
+
+
+
+          <p> 10/10/26
+So I've been working on common multiples of numbers... it is possible there is a easy way to work all that out. however, I noticed an opportunity to create a tool to work this out..  
+
+ #include <iostream>
+#include <numeric> // For std::gcd
+#include <string>
+
+int main() {
+    int a, b, count;
+
+    while (true) {
+        std::cout << "\n=== Common Multiple Finder ===\n";
+        std::cout << "Enter the first number (or type 'q' to quit): ";
+       
+        std::string input;
+        std::cin >> input;
+       
+        // Check if the user wants to quit
+        if (input == "q" || input == "Q" || input == "quit") {
+            std::cout << "Exiting program. Goodbye!\n";
+            break;
+        }
+
+        // Try converting input to an integer
+        try {
+            a = std::stoi(input);
+        } catch (...) {
+            std::cout << "Invalid input. Please try again.\n";
+            continue;
+        }
+
+        std::cout << "Enter the second number: ";
+        std::cin >> b;
+       
+        std::cout << "How many common multiples do you want to see? ";
+        std::cin >> count;
+
+        // Handle edge cases
+        if (a == 0 || b == 0) {
+            std::cout << "Numbers must be non-zero to find common multiples!\n";
+            continue;
+        }
+
+        // Find the Least Common Multiple (LCM)
+        int lcm = std::abs(a * b) / std::gcd(a, b);
+
+        std::cout << "\nFirst " << count << " common multiples of " << a << " and " << b << ":\n";
+        for (int i = 1; i <= count; ++i) {
+            std::cout << lcm * i << " ";
+        }
+        std::cout << "\n";
+    }
+
+    return 0;
+} </p>
     </div>
 
     <script src="script.js"></script>
